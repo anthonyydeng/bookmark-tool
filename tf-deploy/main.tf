@@ -77,10 +77,10 @@ resource "aws_instance" "frontend_server" {
 
   vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
 
-  user_data = templatefile("${path.module}/build-webserver-vm.tpl", { mysql_server_ip = aws_instance.mysql_server.private_ip })
+  user_data = templatefile("${path.module}/build-frontendserver-vm.tpl", { mysql_server_ip = aws_db_instance.mysql_rds.address })
 
   tags = {
-    Name = "WebServer"
+    Name = "FrontendServer"
   }
 }
 
@@ -89,19 +89,45 @@ resource "aws_instance" "backend_server" {
   instance_type = "t2.micro"
   key_name      = "cosc349-2024"
 
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
+  vpc_security_group_ids = [
+    aws_security_group.allow_ssh.id,
+    aws_security_group.allow_web.id
+  ]
 
-  user_data = templatefile("${path.module}/build-webserver-vm.tpl", { mysql_server_ip = aws_instance.mysql_server.private_ip })
+  user_data = templatefile("${path.module}/build-backendserver-vm.tpl", { mysql_server_ip = aws_db_instance.mysql_rds.address })
 
   tags = {
-    Name = "WebServer"
+    Name = "BackendServer"
   }
 }
 
-output "web_server_ip" {
-  value = aws_instance.web_server.public_ip
+resource "aws_db_instance" "mysql_rds" {
+  allocated_storage = 20
+  engine = "mysql"
+  engine_version = "8.0"
+  instance_class = "db.t2.micro"
+  name = "mydb"
+  username = "admin"
+  password = "password"
+  parameter_group_name = "default.mysql8.0"
+  publicly_accessible = true
+  skip_final_snapshot = true
+
+  vpc_security_group_ids = [ aws_security_group.allow_mysql.id ]
+
+  tags = {
+    Name = "MySQL-RDS"
+  }
 }
 
-output "mysql_server_ip" {
-  value = aws_instance.mysql_server.public_ip
+output "frontend_server_ip" {
+  value = aws_instance.frontend_server.public_ip
+}
+
+output "backend_server_ip" {
+  value = aws_instance.backend_server.public_ip
+}
+
+output "mysql_rds_endpoint" {
+  value = aws_db_instance.mysql_rds.address
 }
