@@ -65,7 +65,7 @@ cat << EOF > /var/www/html/front-index.php
     \$conn->close();
     ?>
 
-    <a class="add-btn" href="${aws_instance.backend_server.public_ip}">+</a>
+    <a class="add-btn" href="${backend_server_ip}">+</a>
 </body>
 
 </html>

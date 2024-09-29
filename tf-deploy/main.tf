@@ -77,7 +77,10 @@ resource "aws_instance" "frontend_server" {
 
   vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
 
-  user_data = templatefile("${path.module}/build-frontendserver-vm.tpl", { mysql_server_ip = aws_db_instance.mysql_rds.address })
+  user_data = templatefile("${path.module}/build-frontendserver-vm.tpl", { 
+    mysql_server_ip = aws_db_instance.mysql_rds.address 
+    backend_server_ip = aws_instance.backend_server.public_ip
+    })
 
   tags = {
     Name = "FrontendServer"
