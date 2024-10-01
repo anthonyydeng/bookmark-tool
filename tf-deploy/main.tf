@@ -78,7 +78,11 @@ resource "aws_instance" "frontend_server" {
   vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_web.id]
 
   user_data = templatefile("${path.module}/build-frontendserver-vm.tpl", { 
-    mysql_server_ip = aws_db_instance.mysql_rds.address 
+    mysql_server_ip = aws_db_instance.mysql_rds.address
+    db_name = aws_db_instance.mysql_rds.db_name
+    db_username = aws_db_instance.mysql_rds.username
+    db_password = aws_db_instance.mysql_rds.password
+
     backend_server_ip = aws_instance.backend_server.public_ip
     })
 
@@ -97,7 +101,12 @@ resource "aws_instance" "backend_server" {
     aws_security_group.allow_web.id
   ]
 
-  user_data = templatefile("${path.module}/build-backendserver-vm.tpl", { mysql_server_ip = aws_db_instance.mysql_rds.address })
+  user_data = templatefile("${path.module}/build-backendserver-vm.tpl", { 
+    mysql_server_ip = aws_db_instance.mysql_rds.address 
+    db_name = aws_db_instance.mysql_rds.db_name
+    db_username = aws_db_instance.mysql_rds.username
+    db_password = aws_db_instance.mysql_rds.password
+  })
 
   tags = {
     Name = "BackendServer"

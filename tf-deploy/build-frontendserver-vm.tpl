@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# echo MYSQL_SERVER_IP=${mysql_server_ip} >> /etc/environment
+echo MYSQL_SERVER_IP=${mysql_server_ip} >> /etc/environment
 
 echo "Setup of frontendserver VM has begun.">/var/log/user.log
 
@@ -22,9 +22,9 @@ cat << EOF > /var/www/html/front-index.php
 
     <?php
     \$serverhost = "${mysql_server_ip}";
-    \$dbname = 'bookmark_tool';
-    \$username = 'webuser';
-    \$password = 'lolpassword';
+    \$dbname = '${db_name}';
+    \$username = '${db_username}';
+    \$password = '${db_password}';
 
     // Create connection
     \$conn = new mysqli(\$serverhost, \$username, \$password, \$dbname);
@@ -65,11 +65,118 @@ cat << EOF > /var/www/html/front-index.php
     \$conn->close();
     ?>
 
-    <a class="add-btn" href="${backend_server_ip}">+</a>
+    <a class="add-btn" href="http://${backend_server_ip}/back-index.php">+</a>
 </body>
 
 </html>
 EOF
+
+cat << EOF > /var/www/html/frontstyle.css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+
+    /* text-align: center; */
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* margin-bottom: 40px; */
+}
+
+/* Grid container for the bookmarks */
+.bookmarks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 80px;
+}
+
+/* Individual bookmark card styling */
+.bookmark-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bookmark-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Bookmark title */
+.bookmark-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.bookmark-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.bookmark-title a:hover {
+    text-decoration: underline;
+}
+
+/* Bookmark description */
+.bookmark-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Tags styling */
+.bookmark-tags {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Center utility */
+.center {
+    text-align: center;
+}
+
+.add-btn {
+    /* styling */
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+
+    /* positioning */
+    /* padding-top: 20px; */
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    margin: auto;
+    text-align: center;
+}
+
+.add-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+EOF
+
+chown -R www-data:www-data /var/www/html
+chmod -R 755 /var/www/html
 
 service apache2 restart
 
