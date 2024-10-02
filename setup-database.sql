@@ -1,3 +1,5 @@
+USE bookmark_tool;
+
 -- create a table to store bookmarks
 CREATE TABLE bookmarks (
     bookmark_id INT AUTO_INCREMENT PRIMARY KEY,
