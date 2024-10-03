@@ -238,7 +238,7 @@ if (isset(\$_GET['edit'])) {
         </p>
     </form>
 
-    <a class="back-btn" href="back-index.php">←/a>
+    <a class="back-btn" href="back-index.php">←</a>
 </body>
 
 </html>
