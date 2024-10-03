@@ -78,7 +78,16 @@ cat << EOF > /var/www/html/back-index.php
         <input class="submit-btn" type="submit" value="Add a bookmark" />
     </form>
 
-    <a class="back-btn" href="http://test/front-index">←</a>
+    <?php
+    // Reading txt file for ip address to implement as a button
+    \$file_path = '/var/www/html/frontend_ip.txt';
+    \$file_contents = file_get_contents(\$file_path);
+    if (\$file_contents === false) {
+        echo "Failed to read the file.";
+    } else {
+        echo '<a class="back-btn" href="' . htmlspecialchars(\$file_contents) . '" target="_blank">←</a>';
+    }
+    ?>
 </body>
 
 </html>
@@ -229,7 +238,7 @@ if (isset(\$_GET['edit'])) {
         </p>
     </form>
 
-    <a class="back-btn" href="back-index.php">← Back to Bookmark List</a>
+    <a class="back-btn" href="back-index.php">←/a>
 </body>
 
 </html>
@@ -356,6 +365,12 @@ tr:nth-child(even) {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+EOF
+
+cat << EOF > /var/www/html/frontend_ip.txt
+http://
+
+/front-index.php
 EOF
 
 service apache2 restart

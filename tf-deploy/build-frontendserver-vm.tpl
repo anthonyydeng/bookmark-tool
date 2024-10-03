@@ -65,7 +65,16 @@ cat << EOF > /var/www/html/front-index.php
     \$conn->close();
     ?>
 
-    <a class="add-btn" href="http://${backend_server_ip}/back-index.php">+</a>
+    <?php
+    // Reading txt file for ip address to implement as a button
+    \$file_path = '/var/www/html/backend_ip.txt';
+    \$file_contents = file_get_contents(\$file_path);
+    if (\$file_contents === false) {
+        echo "Failed to read the file.";
+    } else {
+        echo '<a class="add-btn" href="' . htmlspecialchars(\$file_contents) . '" target="_blank">+</a>';
+    }
+    ?>
 </body>
 
 </html>
@@ -173,6 +182,12 @@ h1 {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+EOF
+
+cat << EOF > /var/www/html/backend_ip.txt
+http://
+
+/back-index.php
 EOF
 
 chown -R www-data:www-data /var/www/html
