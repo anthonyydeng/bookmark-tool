@@ -1,6 +1,6 @@
 # COSC349 assignment 2 (2024): 
 
-This repository contains the files required to build and deploy an application in the cloud. Site can be accessed here: http://ec2-107-22-79-207.compute-1.amazonaws.com/front-index.php
+This repository contains the files required to build and deploy an application in the cloud. Site can be accessed here: http://ec2-107-22-79-207.compute-1.amazonaws.com/front-index.php. **Note:** this was only available while assignment was awaiting marking.
 
 ## Overview of Application
 
