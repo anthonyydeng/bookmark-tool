@@ -2,6 +2,10 @@
 
 This repository contains the files required to build and deploy an application in the cloud. Site can be accessed here: http://ec2-107-22-79-207.compute-1.amazonaws.com/front-index.php. **Note:** this was only available while assignment was awaiting marking.
 
+## Video Walkthrough
+
+[![Watch the video](https://img.youtube.com/vi/kuVE6XjZoeo/0.jpg)](https://www.youtube.com/watch?v=kuVE6XjZoeo)
+
 ## Overview of Application
 
 This application is a bookmark management tool that keeps a collection of website links along with an appropriate short description and tags. So far the functionality of the tool is limited to viewing and editing the bookmarks. 
